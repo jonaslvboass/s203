@@ -72,7 +72,7 @@ $ python manage.py runserver
 
 - 🔃 Create a new pull request.
 
-## Team ✨
+## Dev
 <a href="https://rajaprerak.github.io" target="_blank">**Prerak Raja**</a>
 
 
