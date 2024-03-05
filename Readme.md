@@ -66,9 +66,16 @@ $ python manage.py runserver
 
 #### Step 2
 
-- **Build your code** 🔨🔨🔨
+- **Install the requirements** 
+    ```shell
+    $ pip install -r requirements.txt
+    ```
 
 #### Step 3
+
+- **Build your code** 🔨🔨🔨
+
+#### Step 4
 
 - 🔃 Create a new pull request.
 
