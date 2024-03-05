@@ -82,3 +82,6 @@ $ python manage.py runserver
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
 
                                                                                                                                                                                                                                                                         
+## Other
+
+- This is just a note made to make a pull request for testing purposes.
