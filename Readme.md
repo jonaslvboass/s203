@@ -58,7 +58,7 @@ $ python manage.py runserver
 #### Step 1
 
 - **Option 1**
-    - 🍴 Fork this repo!
+    - 🍴 Fork this repository!
 
 - **Option 2**
     - 👯 Clone this repo to your local machine.
