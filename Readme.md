@@ -15,6 +15,8 @@
 
 ----
 
+## Step by step to run the project
+
 ## Installation 📦
 
 >pip install -r requirements.txt
