@@ -73,11 +73,7 @@ $ python manage.py runserver
 - 🔃 Create a new pull request.
 
 ## Team ✨
-
-| <a href="https://rajaprerak.github.io" target="_blank">**Prerak Raja**</a>
-| :---: |
-| [![Prerak Raja](https://github.com/rajaprerak.png?size=100)](https://rajaprerak.github.io)    
-| <a href="https://github.com/rajaprerak" target="_blank">`github.com/rajaprerak`</a>
+<a href="https://rajaprerak.github.io" target="_blank">**Prerak Raja**</a>
 
 
 ## License
