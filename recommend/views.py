@@ -3,7 +3,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.http import Http404
-from .models import Movie, Myrating, MyList
+from .models import Movie, Myrating, MyList, Usuario
 from django.db.models import Q
 from django.contrib import messages
 from django.http import HttpResponseRedirect
