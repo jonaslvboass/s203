@@ -9,6 +9,7 @@ urlpatterns = [
     path('<int:movie_id>/', views.detail, name='detail'),
     path('watch/', views.watch, name='watch'),
     path('recommend/', views.recommend, name='recommend'),
-
+    path('create_users/', create_users, name='create_users'),       #url criada para o exercício, exibindo a lista
 
 ]
+

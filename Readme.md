@@ -70,7 +70,7 @@ $ python manage.py runserver
 
 #### Step 3
 
-- 🔃 Create a new pull request.
+- 🔃 Create pull request
 
 ## Dev
 <a href="https://rajaprerak.github.io" target="_blank">**Prerak Raja**</a>

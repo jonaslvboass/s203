@@ -194,3 +194,20 @@ def Login(request):
 def Logout(request):
     logout(request)
     return redirect("login")
+
+
+# View User
+def create_users(request):
+    # Cria alguns usuários de exemplo
+    user1 = User.objects.create_user(username='user1', email='user1@example.com', password='password123')
+    user2 = User.objects.create_user(username='user2', email='user2@example.com', password='password123')
+
+    # Cria os perfis correspondentes aos usuários
+    profile1 = Profile.objects.create(user=user1, bio='This is user1', location='Somewhere', birth_date='2000-01-01')
+    profile2 = Profile.objects.create(user=user2, bio='This is user2', location='Nowhere', birth_date='1995-05-05')
+
+    # Obtém a lista de todos os usuários e seus perfis
+    users_with_profiles = User.objects.all().prefetch_related('profile')
+
+    # Renderiza o template com a lista de usuários e perfis
+    return render(request, 'user_list.html', {'users_with_profiles': users_with_profiles})
