@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib import admin
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -9,6 +10,6 @@ urlpatterns = [
     path('<int:movie_id>/', views.detail, name='detail'),
     path('watch/', views.watch, name='watch'),
     path('recommend/', views.recommend, name='recommend'),
-
+    path('users/', views.Users, name='users'),
 
 ]
