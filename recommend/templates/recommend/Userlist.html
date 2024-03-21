@@ -1,0 +1,16 @@
+{% extends 'recommend/base.html'%}
+{% block body %}
+
+<h2>User List</h2>
+<hr>
+<br>
+<!-- user list -->
+<div class="row">
+    <ul>
+        {% for user in Users%}
+            <li>Username: {{user.username}}     Email: {{user.email}}</li>
+        {% endfor%}
+    </ul>
+</div>
+
+{% endblock %}
