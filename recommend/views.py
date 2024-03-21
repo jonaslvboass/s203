@@ -194,3 +194,14 @@ def Login(request):
 def Logout(request):
     logout(request)
     return redirect("login")
+
+# To display all users
+def users(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    if not request.user.is_active:
+        raise Http404
+
+    user = User.objects.all()
+    context = {'user': user}
+    return render(request, 'recommend/users.html', context)
