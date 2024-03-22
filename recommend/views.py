@@ -3,7 +3,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.http import Http404
-from .models import Movie, Myrating, MyList
+from .models import Movie, Myrating, MyList, CustomUser
 from django.db.models import Q
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -194,3 +194,15 @@ def Login(request):
 def Logout(request):
     logout(request)
     return redirect("login")
+
+def create_users(request):
+    # Crie alguns usuários de exemplo
+    user1 = CustomUser.objects.create_user(username='user1', email='user1@example.com', password='password123')
+    user2 = CustomUser.objects.create_user(username='user2', email='user2@example.com', password='password123')
+    user3 = CustomUser.objects.create_user(username='user3', email='user3@example.com', password='password123')
+
+    # Obtenha todos os usuários do banco de dados
+    users = CustomUser.objects.all()
+
+    # Renderize o template com a lista de usuários
+    return render(request, 'users_list.html', {'users': users})
