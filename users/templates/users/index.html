@@ -1,0 +1,19 @@
+{% extends "users/base.html" %}
+
+{% block title %}{{ section.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ section.title }}</h1>
+
+<h2>Current Users in the system: </h2>
+{% for user in all_users %}
+    <p><b>Name:</b> {{user.name}}</p>
+    <p><b>Email:</b> {{user.email}}</p>
+    <p><b>Age:</b> {{user.age}}</p>
+{% empty %}
+    <h2>There are no users at the time!</h2>
+{% endfor %}
+
+{% endblock %}
+
+
