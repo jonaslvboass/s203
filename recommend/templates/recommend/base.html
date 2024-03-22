@@ -89,6 +89,12 @@
                             <span aria-hidden="true"></span>MyList
                         </a>
                     </li>
+                    <li>
+                        <a href="{% url 'user_list' %}">
+                            <span aria-hidden="true"></span>MyListUsers
+                        </a>
+                    </li>
+
                  {% if not request.user.is_authenticated %}
                     <li>
                         <a href="{% url 'signup' %}">

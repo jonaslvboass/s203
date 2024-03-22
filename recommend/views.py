@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .models import Movie, Myrating, MyList
 from django.db.models import Q
 from django.contrib import messages
@@ -189,6 +189,9 @@ def Login(request):
 
     return render(request, 'recommend/login.html')
 
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'recommend/user_list.html', {'users': users})
 
 # Logout user
 def Logout(request):
