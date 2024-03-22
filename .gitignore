@@ -2,3 +2,5 @@
 recommend/algorithm/
 settings.json
 *.pyc
+.env\
+.env
