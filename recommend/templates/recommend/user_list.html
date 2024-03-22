@@ -1,0 +1,6 @@
+<h1>Lista de Usuários</h1>
+<ul>
+{% for usuario in usuarios %}
+<li>{{ usuario.name }} - {{ usuario.email }} - {{ usuario.password }}</li>
+{% endfor %}
+</ul>

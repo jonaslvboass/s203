@@ -3,12 +3,14 @@ from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.http import Http404
-from .models import Movie, Myrating, MyList
+from .models import Movie, Myrating, MyList, User
 from django.db.models import Q
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db.models import Case, When
+from django.template import loader
 import pandas as pd
+
 
 # Create your views here.
 
@@ -189,6 +191,15 @@ def Login(request):
 
     return render(request, 'recommend/login.html')
 
+#lists all users
+def user_create(request):
+    usuario1 = Usuario.objects.create(name = 'Marcelo', email = 'marcelinhohotwheels22@yahoo.com.br', password = '123456')
+    usuario2 = Usuario.objects.create(name = 'Vinicius13', email = 'redstonelover@gmail.com', password = '123456')
+
+    usuarios = Usuario.objects.all()
+
+    template = loader.get_template("user_list.html")
+    return render(request, template, {"usuarios": usuarios})
 
 # Logout user
 def Logout(request):
