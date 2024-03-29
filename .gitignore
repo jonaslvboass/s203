@@ -1,4 +1,5 @@
 .idea
 recommend/algorithm/
 settings.json
+venv
 *.pyc

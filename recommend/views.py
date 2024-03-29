@@ -189,8 +189,14 @@ def Login(request):
 
     return render(request, 'recommend/login.html')
 
-
+ 
 # Logout user
 def Logout(request):
     logout(request)
-    return redirect("login")
+    return redirect("login") 
+   
+ 
+def listMovies(request):
+    movies = Movie.objects.all()
+    return render(request, 'recommend/list_movies.html', {'movies': movies})                                        
+          

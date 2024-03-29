@@ -1,0 +1,9 @@
+{% for movie in movies %}
+  <div>
+    <h2>{{ movie.title }}</h2>
+    <p>Gênero: {{ movie.genre }}</p>
+    <img src="{{ movie.movie_logo }}" alt="{{ movie.title }}">
+  </div>
+{% endfor %}
+
+

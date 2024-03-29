@@ -14,10 +14,10 @@
 <img src="website_images/DetailPage.png" width="900">
 
 ----
-
+ 
 ## Installation 📦
 
->pip install -r requirements.txt
+>pip install -r requirements.txt 
 
 #### Clone
 
