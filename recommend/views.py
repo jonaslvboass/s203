@@ -199,6 +199,11 @@ def Logout(request):
 
 # List of users
 def users(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    if not request.user.is_active:
+        raise Http404
+    
     users = User.objects.all()
     quantity = User.objects.all().count()
     return render(request, 'registration/users.html', {'users': users, 'quantity': quantity})

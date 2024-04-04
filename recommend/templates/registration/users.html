@@ -6,12 +6,12 @@
             <h2>Users List</h2>
         </span>
     </p>
-    <hr>
+    <hr>    
     <br>
     <div class="row" >
         {% if users %}
             {% for user in users %} 
-                <div class="user_row" style="padding: 10px 32px; display:flex; align-itens:flex-start">
+                <div class="user_row" style="padding: 10px 32px; display:flex; align-items:flex-start">
                     <div class="thumbnail" style="border-radius: 22px 22px 22px 22px; width:12em; margin-right:45px">
                         <center><h5>{{user.username}}</h5></center>
                     </div>
