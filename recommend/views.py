@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.http import Http404
@@ -10,7 +11,6 @@ from django.http import HttpResponseRedirect
 from django.db.models import Case, When
 import pandas as pd
 
-# Create your views here.
 
 def index(request):
     movies = Movie.objects.all()
@@ -108,6 +108,7 @@ def get_similar(movie_name,rating,corrMatrix):
     similar_ratings = similar_ratings.sort_values(ascending=False)
     return similar_ratings
 
+
 # Recommendation Algorithm
 def recommend(request):
 
@@ -168,7 +169,7 @@ def signUp(request):
 
     context = {'form': form}
 
-    return render(request, 'recommend/signUp.html', context)
+    return render(request, 'registration/signUp.html', context)
 
 
 # Login User
@@ -183,14 +184,21 @@ def Login(request):
                 login(request, user)
                 return redirect("index")
             else:
-                return render(request, 'recommend/login.html', {'error_message': 'Your account disable'})
+                return render(request, 'registration/login.html', {'error_message': 'Your account disable'})
         else:
-            return render(request, 'recommend/login.html', {'error_message': 'Invalid Login'})
+            return render(request, 'registration/login.html', {'error_message': 'Invalid Login'})
 
-    return render(request, 'recommend/login.html')
+    return render(request, 'registration/login.html')
 
 
 # Logout user
 def Logout(request):
     logout(request)
     return redirect("login")
+
+
+# List of users
+def users(request):
+    users = User.objects.all()
+    quantity = User.objects.all().count()
+    return render(request, 'registration/users.html', {'users': users, 'quantity': quantity})

@@ -23,3 +23,4 @@ class MyList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     watch = models.BooleanField(default=False)
+    
