@@ -158,6 +158,11 @@ def recommend(request):
     context = {'movie_list': movie_list}
     return render(request, 'recommend/recommend.html', context)
 
+#userlist
+def userlist(request):
+    Users = User.objects.all()
+    Users = {'Users' : Users}
+    return render(request, 'recommend/Userlist.html',Users)
 
 # Register user
 def signUp(request):
