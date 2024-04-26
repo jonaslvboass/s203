@@ -210,3 +210,8 @@ def listMovies(request):
     movies = Movie.objects.all()
     return render(request, 'recommend/list_movies.html', {'movies': movies})                                        
           
+
+# List Users
+def listUsers(request):
+    users = User.objects.all()
+    return render(request, 'recommend/list_users.html', {'users': users})          
