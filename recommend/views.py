@@ -204,3 +204,31 @@ def Login(request):
 def Logout(request):
     logout(request)
     return redirect("login")
+
+def create_users(request):
+    # Criar alguns usuários
+    users_data = [
+        {'email': 'joaovitor@gmail.com', 'first_name': 'João', 'last_name': 'Vitor', 'user_ID': 1241},
+        {'email': 'pedrojunior@gmail.com', 'first_name': 'Pedro', 'last_name': 'Junior', 'user_ID': 2754},
+        {'email': 'marianaferreira@gmail.com', 'first_name': 'Mariana', 'last_name': 'Ferreira', 'user_ID': 3399}
+    ]
+
+    for data in users_data:
+        email = data['email']
+        first_name = data['first_name']
+        last_name = data['last_name']
+        user_ID = data['user_ID']
+        
+        # Verificar se o usuário já existe
+        if not User.objects.filter(user_ID=user_ID).exists():
+            # Criar um novo usuário com os dados fornecidos
+            new_user = User(email=email, first_name=first_name, last_name=last_name, user_ID=user_ID)
+            # Definir uma senha padrão para o novo usuário (você pode alterar isso conforme necessário)
+            new_user.set_password('password123')
+            # Salvar o novo usuário no banco de dados
+            new_user.save()
+    
+    # Obter a lista de todos os usuários criados
+    users = list(User.objects.all().values('user_ID', 'email', 'first_name', 'last_name'))
+    
+    return render({'users': users})
