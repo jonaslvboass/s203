@@ -119,13 +119,13 @@ def recommend(request):
 
     movie_rating=pd.DataFrame(list(Myrating.objects.all().values()))
 
-    new_user=movie_rating.user_id.unique().shape[0]
-    current_user_id= request.user.id
-	# if new user not rated any movie
-    if current_user_id>new_user:
-        movie=Movie.objects.get(id=19)
-        q=Myrating(user=request.user,movie=movie,rating=0)
-        q.save()
+    # new_user=movie_rating.user_id.unique().shape[0]
+    # current_user_id= request.user.id
+	# # if new user not rated any movie
+    # if current_user_id>new_user:
+    #     movie=Movie.objects.get(id=19)
+    #     q=Myrating(user=request.user,movie=movie,rating=0)
+    #     q.save()
 
 
     userRatings = movie_rating.pivot_table(index=['user_id'],columns=['movie_id'],values='rating')
@@ -136,14 +136,24 @@ def recommend(request):
     user_filtered = [tuple(x) for x in user.values]
     movie_id_watched = [each[0] for each in user_filtered]
 
-    similar_movies = pd.DataFrame()
+    # similar_movies = pd.DataFrame()
+    similar_ratings=pd.Series()
     for movie,rating in user_filtered:
-        similar_movies = similar_movies.append(get_similar(movie,rating,corrMatrix),ignore_index = True)
-
-    movies_id = list(similar_movies.sum().sort_values(ascending=False).index)
+        if not similar_ratings.empty:
+            similar_ratings += get_similar(movie,rating,corrMatrix)
+        else:
+            similar_ratings = get_similar(movie,rating,corrMatrix)
+        # similar_movies = pd.concat([similar_movies, similar_ratings])
+    
+    print(similar_ratings)
+    movies_id = list(similar_ratings.groupby('movie_id').sum().sort_values(ascending=False).index)
+    
     movies_id_recommend = [each for each in movies_id if each not in movie_id_watched]
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(movies_id_recommend)])
+    print(preserved)
     movie_list=list(Movie.objects.filter(id__in = movies_id_recommend).order_by(preserved)[:10])
+
+    print(movie_list)
 
     context = {'movie_list': movie_list}
     return render(request, 'recommend/recommend.html', context)
@@ -194,3 +204,31 @@ def Login(request):
 def Logout(request):
     logout(request)
     return redirect("login")
+
+def create_users(request):
+    # Criar alguns usuários
+    users_data = [
+        {'email': 'joaovitor@gmail.com', 'first_name': 'João', 'last_name': 'Vitor', 'user_ID': 1241},
+        {'email': 'pedrojunior@gmail.com', 'first_name': 'Pedro', 'last_name': 'Junior', 'user_ID': 2754},
+        {'email': 'marianaferreira@gmail.com', 'first_name': 'Mariana', 'last_name': 'Ferreira', 'user_ID': 3399}
+    ]
+
+    for data in users_data:
+        email = data['email']
+        first_name = data['first_name']
+        last_name = data['last_name']
+        user_ID = data['user_ID']
+        
+        # Verificar se o usuário já existe
+        if not User.objects.filter(user_ID=user_ID).exists():
+            # Criar um novo usuário com os dados fornecidos
+            new_user = User(email=email, first_name=first_name, last_name=last_name, user_ID=user_ID)
+            # Definir uma senha padrão para o novo usuário (você pode alterar isso conforme necessário)
+            new_user.set_password('password123')
+            # Salvar o novo usuário no banco de dados
+            new_user.save()
+    
+    # Obter a lista de todos os usuários criados
+    users = list(User.objects.all().values('user_ID', 'email', 'first_name', 'last_name'))
+    
+    return render({'users': users})
