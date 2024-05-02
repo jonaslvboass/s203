@@ -9,5 +9,3 @@ urlpatterns = [
     path('<int:movie_id>/', views.detail, name='detail'),
     path('watch/', views.watch, name='watch'),
     path('recommend/', views.recommend, name='recommend'),
-    path('users/', views.users, name='users_list'),
-]
