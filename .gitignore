@@ -2,4 +2,6 @@
 recommend/algorithm/
 settings.json
 *.pyc
-.venv/
+
+# Python venv
+venv/
