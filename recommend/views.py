@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.http import Http404
@@ -10,7 +11,6 @@ from django.http import HttpResponseRedirect
 from django.db.models import Case, When
 import pandas as pd
 
-# Create your views here.
 
 def index(request):
     movies = Movie.objects.all()
@@ -108,6 +108,7 @@ def get_similar(movie_name,rating,corrMatrix):
     similar_ratings = similar_ratings.sort_values(ascending=False)
     return similar_ratings
 
+
 # Recommendation Algorithm
 def recommend(request):
 
@@ -178,7 +179,7 @@ def signUp(request):
 
     context = {'form': form}
 
-    return render(request, 'recommend/signUp.html', context)
+    return render(request, 'registration/signUp.html', context)
 
 
 # Login User
@@ -193,42 +194,14 @@ def Login(request):
                 login(request, user)
                 return redirect("index")
             else:
-                return render(request, 'recommend/login.html', {'error_message': 'Your account disable'})
+                return render(request, 'registration/login.html', {'error_message': 'Your account disable'})
         else:
-            return render(request, 'recommend/login.html', {'error_message': 'Invalid Login'})
+            return render(request, 'registration/login.html', {'error_message': 'Invalid Login'})
 
-    return render(request, 'recommend/login.html')
+    return render(request, 'registration/login.html')
 
 
 # Logout user
 def Logout(request):
     logout(request)
     return redirect("login")
-
-def create_users(request):
-    # Criar alguns usuários
-    users_data = [
-        {'email': 'joaovitor@gmail.com', 'first_name': 'João', 'last_name': 'Vitor', 'user_ID': 1241},
-        {'email': 'pedrojunior@gmail.com', 'first_name': 'Pedro', 'last_name': 'Junior', 'user_ID': 2754},
-        {'email': 'marianaferreira@gmail.com', 'first_name': 'Mariana', 'last_name': 'Ferreira', 'user_ID': 3399}
-    ]
-
-    for data in users_data:
-        email = data['email']
-        first_name = data['first_name']
-        last_name = data['last_name']
-        user_ID = data['user_ID']
-        
-        # Verificar se o usuário já existe
-        if not User.objects.filter(user_ID=user_ID).exists():
-            # Criar um novo usuário com os dados fornecidos
-            new_user = User(email=email, first_name=first_name, last_name=last_name, user_ID=user_ID)
-            # Definir uma senha padrão para o novo usuário (você pode alterar isso conforme necessário)
-            new_user.set_password('password123')
-            # Salvar o novo usuário no banco de dados
-            new_user.save()
-    
-    # Obter a lista de todos os usuários criados
-    users = list(User.objects.all().values('user_ID', 'email', 'first_name', 'last_name'))
-    
-    return render({'users': users})

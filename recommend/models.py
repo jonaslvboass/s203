@@ -24,8 +24,3 @@ class MyList(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     watch = models.BooleanField(default=False)
 
-class User(models.Model):
-    email = models.EmailField(unique = True, blank = False)
-    first_name = models.CharField(max_Lenght = 20, blank = False)
-    last_name = models.CharField(max_Lenght = 100, blank = False)
-    user_ID = models.IntegerField(primary_key = True, unique = True)
