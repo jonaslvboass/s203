@@ -1,4 +1,5 @@
 ## Django based movie recommender system
+
 > https://awesome-movie-recommender.herokuapp.com
 
 ![GitHub stars](https://img.shields.io/github/stars/rajaprerak/movie_recommender) 
