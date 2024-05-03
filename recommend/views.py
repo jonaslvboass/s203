@@ -22,6 +22,16 @@ def index(request):
 
     return render(request, 'recommend/list.html', {'movies': movies})
 
+def indexgenre(request):
+    movies = Movie.objects.all().order_by('genre')
+    query = request.GET.get('q')
+
+    if query:
+        movies = Movie.objects.filter(Q(title__icontains=query)).distinct().order_by('genre')
+        return render(request, 'recommend/list.html', {'movies': movies})
+
+    return render(request, 'recommend/list.html', {'movies': movies})
+
 
 # Show details of the movie
 def detail(request, movie_id):
