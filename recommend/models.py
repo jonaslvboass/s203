@@ -24,3 +24,6 @@ class MyList(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     watch = models.BooleanField(default=False)
 
+class FollowList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Following = models.IntegerField(default=0)
