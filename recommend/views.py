@@ -3,14 +3,12 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from .models import Movie, Myrating, MyList
-from django.db.models import Q
+from django.db.models import Q, Case, When
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.db.models import Case, When
 import pandas as pd
-
 
 def index(request):
     movies = Movie.objects.all()
@@ -22,7 +20,6 @@ def index(request):
 
     return render(request, 'recommend/list.html', {'movies': movies})
 
-
 def indexgenre(request):
     movies = Movie.objects.all().order_by('genre')
     query = request.GET.get('q')
@@ -32,7 +29,6 @@ def indexgenre(request):
         return render(request, 'recommend/list.html', {'movies': movies})
 
     return render(request, 'recommend/list.html', {'movies': movies})
-
 
 # Show details of the movie
 def detail(request, movie_id):
@@ -67,7 +63,6 @@ def detail(request, movie_id):
             else:
                 messages.success(request, "Movie removed from your list!")
 
-
         # For rating
         else:
             rate = request.POST['rating']
@@ -94,7 +89,6 @@ def detail(request, movie_id):
     context = {'movies': movies, 'movie_rating': movie_rating, 'rate_flag': rate_flag, 'update': update}
     return render(request, 'recommend/detail.html', context)
 
-
 # MyList functionality
 def watch(request):
     if not request.user.is_authenticated:
@@ -111,13 +105,11 @@ def watch(request):
 
     return render(request, 'recommend/watch.html', {'movies': movies})
 
-
 # To get similar movies based on user rating
 def get_similar(movie_name, rating, corrMatrix):
     similar_ratings = corrMatrix[movie_name] * (rating - 2.5)
     similar_ratings = similar_ratings.sort_values(ascending=False)
     return similar_ratings
-
 
 # Recommendation Algorithm
 def recommend(request):
@@ -127,15 +119,6 @@ def recommend(request):
         raise Http404
 
     movie_rating = pd.DataFrame(list(Myrating.objects.all().values()))
-
-    # new_user=movie_rating.user_id.unique().shape[0]
-    # current_user_id= request.user.id
-    # # if new user not rated any movie
-    # if current_user_id>new_user:
-    #     movie=Movie.objects.get(id=19)
-    #     q=Myrating(user=request.user,movie=movie,rating=0)
-    #     q.save()
-
     userRatings = movie_rating.pivot_table(index=['user_id'], columns=['movie_id'], values='rating')
     userRatings = userRatings.fillna(0, axis=1)
     corrMatrix = userRatings.corr(method='pearson')
@@ -144,28 +127,52 @@ def recommend(request):
     user_filtered = [tuple(x) for x in user.values]
     movie_id_watched = [each[0] for each in user_filtered]
 
-    # similar_movies = pd.DataFrame()
     similar_ratings = pd.Series()
     for movie, rating in user_filtered:
         if not similar_ratings.empty:
             similar_ratings += get_similar(movie, rating, corrMatrix)
         else:
             similar_ratings = get_similar(movie, rating, corrMatrix)
-        # similar_movies = pd.concat([similar_movies, similar_ratings])
 
-    print(similar_ratings)
     movies_id = list(similar_ratings.groupby('movie_id').sum().sort_values(ascending=False).index)
-
     movies_id_recommend = [each for each in movies_id if each not in movie_id_watched]
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(movies_id_recommend)])
-    print(preserved)
     movie_list = list(Movie.objects.filter(id__in=movies_id_recommend).order_by(preserved)[:10])
-
-    print(movie_list)
 
     context = {'movie_list': movie_list}
     return render(request, 'recommend/recommend.html', context)
 
+# Nova view para exportar recomendações em formato JSON
+def recommend_json(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'User not authenticated'}, status=401)
+    if not request.user.is_active:
+        return JsonResponse({'error': 'User not active'}, status=403)
+
+    movie_rating = pd.DataFrame(list(Myrating.objects.all().values()))
+    userRatings = movie_rating.pivot_table(index=['user_id'], columns=['movie_id'], values='rating')
+    userRatings = userRatings.fillna(0, axis=1)
+    corrMatrix = userRatings.corr(method='pearson')
+
+    user = pd.DataFrame(list(Myrating.objects.filter(user=request.user).values())).drop(['user_id', 'id'], axis=1)
+    user_filtered = [tuple(x) for x in user.values]
+    movie_id_watched = [each[0] for each in user_filtered]
+
+    similar_ratings = pd.Series(dtype=float)
+    for movie, rating in user_filtered:
+        if not similar_ratings.empty:
+            similar_ratings += get_similar(movie, rating, corrMatrix)
+        else:
+            similar_ratings = get_similar(movie, rating, corrMatrix)
+
+    movies_id = list(similar_ratings.groupby('movie_id').sum().sort_values(ascending=False).index)
+    movies_id_recommend = [each for each in movies_id if each not in movie_id_watched]
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(movies_id_recommend)])
+    movie_list = list(Movie.objects.filter(id__in=movies_id_recommend).order_by(preserved)[:10])
+
+    recommendations = [{'id': movie.id, 'title': movie.title} for movie in movie_list]
+
+    return JsonResponse(recommendations, safe=False)
 
 # Register user
 def signUp(request):
@@ -188,7 +195,6 @@ def signUp(request):
 
     return render(request, 'registration/signUp.html', context)
 
-
 # Login User
 def Login(request):
     if request.method == "POST":
@@ -207,7 +213,6 @@ def Login(request):
 
     return render(request, 'registration/login.html')
 
-
 # Logout user
 def Logout(request):
     logout(request)
@@ -216,4 +221,3 @@ def Logout(request):
 def listUsers(request):
     users = User.objects.all()
     return render(request, 'recommend/list_users.html', {'users': users})
-
