@@ -81,11 +81,10 @@
             margin-top: auto;
         }
 
-        .user-card button:hover
-        background-color: #1E86FF
-
-        ; /* Azul mais escuro ao passar o mouse */
+        .user-card button:hover {
+        background-color: #1E86FF; /* Azul mais escuro ao passar o mouse */
         }
+
         body {
             background-color: #0E1C3A;
         }
@@ -118,7 +117,9 @@
             <div class="user-card">
                 <img src="https://via.placeholder.com/150" alt="{{ user.username }}">
                 <h3>{{ user.username }}</h3>
-                <button>Entrar no Perfil</button>
+                <button>
+                    <a href="{% url 'user_detail' user.id %}">Ver perfil</a>
+                </button>
             </div>
         {% endfor %}
     </div>
